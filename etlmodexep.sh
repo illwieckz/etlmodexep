@@ -3,9 +3,6 @@
 # Author:  Thomas DEBESSE <dev@illwieckz.net>
 # License: ISC
 
-filename_original="${filename}.original"
-filename_patched="${filename}.patched"
-
 get_cqbtest_name () {
 	echo "TrueCombat:Close Quarters Battle"
 }
@@ -61,6 +58,8 @@ cqbtest_patcher () {
 
 main () {
 	filename="${1}"
+	filename_original="${filename}.original"
+	filename_patched="${filename}.patched"
 	already_patched="false"
 
 	if compare "${filename}" "$("get_cqbtest_original_sum")"
