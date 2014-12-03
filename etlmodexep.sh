@@ -56,8 +56,52 @@ cqbtest_patcher () {
 	&& dd status=none if="${1}" bs=864941 skip=1
 }
 
+print_help () {
+	tab="$(printf '\t')"
+
+	<<-EOF cat
+	Usage: ${0} [FILE] [MOD NAME]
+
+	${0} is a tool to patch binary files from mod to enable them to run on ET:Legacy. It overwrites some broken code.
+
+	FILE
+	${tab}path/to/qagame.mp.i386.so
+	${tab}${tab}will patch path/to/qagame.mp.i386.so
+
+	MOD NAME
+	${tab}cqbtest
+	${tab}${tab}will patch ~/.etlegacy/cqbtest/qagame.mp.i386.so
+
+	EXAMPLE
+	To patch TrueCombat:Close Quarters Battle:
+	$ ${0} cqbtest
+
+	WARNING
+	This tool must be use to patch servers only, it will break your client installation.
+	ET:Legacy clients do not need and must not be patched.
+	EOF
+}
+
+expand () {
+	case "${1}" in
+		cqbtest)
+			echo "${HOME}/.etlegacy/cqbtest/qagame.mp.i386.so"
+			;;
+		*)
+			echo "${1}"
+			;;
+	esac
+}
+
 main () {
-	filename="${1}"
+	case "${1}" in
+		-h|--help)
+			print_help
+			return
+		;;
+	esac
+
+	filename="$(expand ${1})"
 	filename_original="${filename}.original"
 	filename_patched="${filename}.patched"
 	already_patched="false"
