@@ -13,6 +13,16 @@ get_cqbtest_patched_sum () {
 	echo "765bfc195486af857ea70a2650528953a72f9475c962c25eb075861f1b66bcc9027a2b7a7fb2bd420364b653f0c660216e3b525de06dd71f52b462c808765d68"
 }
 
+get_tcetest_name () {
+	echo "TrueCombat:Elite"
+}
+get_tcetest_original_sum () {
+	echo "9a36878e0e7d6dda77444abccc80a8b1c74849b230c4c8d09547ffcfd31c1922a893aa76bab85a83c3ca29f3935328a9d975514bcef6d183c2849c484cd123e9"
+}
+get_tcetest_patched_sum () {
+	echo "549257c80c5f22a6183795e4098995448a542dde02a2a65a60707834b0e7f4b26ddf2a2970b72e7c8bc6cdedc59a10d57904ddf0dedf04cebe8d2a45ba806617"
+}
+
 ask () {
 	# $1: string
 	printf "%s (Y/n) " "${1}"
@@ -56,13 +66,28 @@ cqbtest_patcher () {
 	&& dd status=none if="${1}" bs=864941 skip=1
 }
 
+tcetest_patcher () {
+	# $1: filename_original
+	dd status=none if="${1}" bs=737854 count=1 \
+	&& nop_writer 21 \
+	&& dd status=none if="${1}" bs=1 skip=737875 count=6 \
+	&& nop_writer 32 \
+	&& dd status=none if="${1}" bs=1 skip=737913 count=5 \
+	&& nop_writer 6 \
+	&& dd status=none if="${1}" bs=737924 skip=1
+}
+
 print_help () {
 	tab="$(printf '\t')"
 
 	<<-EOF cat
-	Usage: ${0} [FILE] [MOD NAME]
+	Usage: ${0} [OPTION] [FILE] [MOD NAME]
 
 	${0} is a tool to patch binary files from mod to enable them to run on ET:Legacy. It overwrites some broken code.
+
+	OPTION
+	${tab}-h, --help
+	${tab}${tab}print this help
 
 	FILE
 	${tab}path/to/qagame.mp.i386.so
@@ -70,11 +95,16 @@ print_help () {
 
 	MOD NAME
 	${tab}cqbtest
-	${tab}${tab}will patch ~/.etlegacy/cqbtest/qagame.mp.i386.so
+	${tab}${tab}will patch ${HOME}/.etlegacy/cqbtest/qagame.mp.i386.so
+	${tab}tcetest
+	${tab}${tab}will patch ${HOME}/.etlegacy/tcetest/qagame.mp.i386.so
 
 	EXAMPLE
-	To patch TrueCombat:Close Quarters Battle:
+	To patch TrueCombat:Close Quarters Battle using mod name:
 	$ ${0} cqbtest
+
+	To patch TrueCombat:Elite using filename:
+	$ ${0} ${HOME}/.etlegacy/tcetest/qagame.mp.i386.so
 
 	WARNING
 	This tool must be use to patch servers only, it will break your client installation.
@@ -86,6 +116,9 @@ expand () {
 	case "${1}" in
 		cqbtest)
 			echo "${HOME}/.etlegacy/cqbtest/qagame.mp.i386.so"
+			;;
+		tcetest)
+			echo "${HOME}/.etlegacy/tcetest/qagame.mp.i386.so"
 			;;
 		*)
 			echo "${1}"
@@ -106,12 +139,21 @@ main () {
 	filename_patched="${filename}.patched"
 	already_patched="false"
 
+	echo "Working on file “${filename}”."
+
 	if compare "${filename}" "$("get_cqbtest_original_sum")"
 	then
 		mod_name="cqbtest"
 	elif compare "${filename}" "$("get_cqbtest_patched_sum")"
 	then
 		mod_name="cqbtest"
+		already_patched="true"
+	elif compare "${filename}" "$("get_tcetest_original_sum")"
+	then
+		mod_name="tcetest"
+	elif compare "${filename}" "$("get_tcetest_patched_sum")"
+	then
+		mod_name="tcetest"
 		already_patched="true"
 	else
 		echo "ERR: File unknown, will do nothing."
