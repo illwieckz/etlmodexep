@@ -36,7 +36,7 @@ See the complete help with `./etlmodexep --help` for more information.
 Warning
 -------
 
-Theses patches must be use with ET:Legacy servers only. Never use them for ET:Legacy clients. If you want to host a game and play on the same computer, launch the dedicated server with another user.
+These patches must be used with ET:Legacy servers only. Never use them for ET:Legacy clients. If you want to host a game and play on the same computer, launch the dedicated server with another user.
 
 Author
 ------
