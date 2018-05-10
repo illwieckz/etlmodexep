@@ -11,7 +11,7 @@ Usage
 If mods are installed in standard ET:Legacy user directory, you can use the _cqbtest_ and _tcetest_ alias like that:
 
 ```
-./etlmodexep.sh cqbtest
+./etlmodexep cqbtest
 Working on file “/home/luser/.etlegacy/cqbtest/qagame.mp.i386.so”.
 Binary file from “TrueCombat:Close Quarters Battle” recognized.
 File will be patched, continue? (Y/n) 
@@ -23,7 +23,7 @@ Or you can pass a full path like that:
 
 
 ```
-./etlmodexep.sh /home/luser/.etlegacy/tcetest/qagame.mp.i386.so
+./etlmodexep /home/luser/.etlegacy/tcetest/qagame.mp.i386.so
 Working on file “/home/luser/.etlegacy/tcetest/qagame.mp.i386.so”.
 Binary file from “TrueCombat:Elite” recognized.
 File will be patched, continue? (Y/n)
@@ -31,7 +31,7 @@ File successfully patched.
 File successfully overwriten by patched one.
 ```
 
-See the complete help with `./etlmodexep.sh --help` for more information.
+See the complete help with `./etlmodexep --help` for more information.
 
 Warning
 -------
