@@ -107,7 +107,7 @@ print_help () {
 	$ ${0} ${HOME}/.etlegacy/tcetest/qagame.mp.i386.so
 
 	WARNING
-	This tool must be use to patch servers only, it will break your client installation.
+	This tool must be used to patch servers only, using it on client will break your client.
 	ET:Legacy clients do not need and must not be patched.
 	EOF
 }
